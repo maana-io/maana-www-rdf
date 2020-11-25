@@ -1,13 +1,7 @@
-const select = async ({
-  graphRef,
-  filter,
-  take,
-  offset,
-  __requestCkg: ckg,
-}) => {
-  // The graph being queried is dynamic
-  const kindPrefix = graphRef.kind[0].toLowerCase() + graphRef.kind.slice(1);
-  const fn = `${kindPrefix}Filter`;
+// -- BEGIN BOILERPLATE
+const select = async ({ filter, take, offset, ckg, svcRef, ontoKind }) => {
+  const filterPrefix = ontoKind[0].toLowerCase() + ontoKind.slice(1);
+  const fn = `${filterPrefix}Filter`;
 
   // Generate the query template
   const query = `query ${fn}($filters: [FieldFilterInput!]!, $take: Int, $offset: Int) {${fn}(filters: $filters, take: $take, offset: $offset) {id subject predicate object language datatype}}`;
@@ -25,15 +19,19 @@ const select = async ({
   }, []);
 
   const args = {
-    svcRef: graphRef.svc,
+    svcRef,
     query,
     variables: { filters, take, offset },
   };
 
-  // throw new Error(JSON.stringify(args))
-
   const res = await ckg(args);
   return res[fn];
 };
+// --- END BOILERPLATE
+
+// Specialize boilerplate
+input.ckg = input.__requestCkg;
+input.svcRef = input.__ownerSvcRef;
+input.ontoKind = "RDFGraph";
 
 return select(input);
