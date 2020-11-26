@@ -7,7 +7,7 @@ import rdflib
 
 
 def help_exit(error):
-    print("rdfcsv.py -i <inputfile> -f <input format> -o <outputfile>")
+    print("Usage: rdfcsv.py -i <inputfile> -f <input format> -o <outputfile>")
     print("\nSupported input formats:")
     print("\tapplication/rdf+xml")
     print("\txml")
@@ -38,10 +38,10 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hi:f:o:", ["ifile=", "iformat=", "ofile="])
     except getopt.GetoptError:
-        help_exit(2)
+        help_exit(1)
     for opt, arg in opts:
         if opt == '-h':
-            help_exit(-1)
+            help_exit(0)
         elif opt in ("-i", "--ifile"):
             inputfile = arg
         elif opt in ("-f", "--iformat"):
