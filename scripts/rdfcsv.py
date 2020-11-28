@@ -7,7 +7,7 @@ import rdflib
 
 
 def help_exit(error):
-    print("Usage: rdfcsv.py -i <inputfile> -f <input format> -o <outputfile>")
+    print("Usage: rdfcsv.py -i <input file> -f <input format> -o <output file>")
     print("\nSupported input formats:")
     print("\tapplication/rdf+xml")
     print("\txml")
@@ -31,10 +31,9 @@ def help_exit(error):
 
 
 def main(argv):
-    inputfile = ''
-    inputformat = ''
-    graphname = ''
-    outputfile = ''
+    input_file = ''
+    input_format = ''
+    output_file = ''
     try:
         opts, args = getopt.getopt(argv, "hi:f:o:", ["ifile=", "iformat=", "ofile="])
     except getopt.GetoptError:
@@ -43,18 +42,18 @@ def main(argv):
         if opt == '-h':
             help_exit(0)
         elif opt in ("-i", "--ifile"):
-            inputfile = arg
+            input_file = arg
         elif opt in ("-f", "--iformat"):
-            inputformat = arg
+            input_format = arg
         elif opt in ("-o", "--ofile"):
-            outputfile = arg
+            output_file = arg
 
     g = rdflib.Graph()
-    g.parse(inputfile, format=inputformat)
+    g.parse(input_file, format=input_format)
     fields = ['id', 'subject', 'predicate', 'object', 'language', 'datatype']
 
     i = 0
-    with open(outputfile, 'w') as csvfile:
+    with open(output_file, 'w') as csvfile:
         csvwriter = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
         csvwriter.writerow(fields)
 
